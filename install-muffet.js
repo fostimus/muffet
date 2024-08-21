@@ -11,7 +11,7 @@ let binaryName;
 // if (platform === "linux") {
 //   binaryName =  "muffet-linux"
 // } 
-else if (platform === "darwin") {
+if (platform === "darwin") {
   binaryName = "muffet-macos"
 } 
 // else if (platform === "win32") {
