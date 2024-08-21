@@ -1,0 +1,7 @@
+{
+  "name": "muffet",
+  "version": "0.0.0",
+  "description": "Node wrapper for the golang tool, Muffet",
+  "main": "index.js",
+  "license": "MIT"
+}
