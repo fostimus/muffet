@@ -23,7 +23,7 @@ else {
 }
 
 const sourcePath = path.join(`${process.cwd()}/binaries`, binaryName);
-const destDir = path.resolve(process.cwd(), "..", "node_modules/.bin");
+const destDir = path.resolve(process.cwd(), "../..", "node_modules/.bin");
 const destPath = path.join(
   destDir,
   platform === "win32" ? "muffet.exe" : "muffet"
