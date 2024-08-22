@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 
 const platform = os.platform();
-const binaryPath = path.join(__dirname, "binaries");
+const binaryPath = path.join(process.cwd(), "binaries");
 
 let binaryName;
 
@@ -22,8 +22,8 @@ else {
   process.exit(1);
 }
 
-const sourcePath = path.join(`${__dirname}/binaries`, binaryName);
-const destDir = path.join(__dirname, "node_modules/.bin");
+const sourcePath = path.join(`${process.cwd()}/binaries`, binaryName);
+const destDir = path.join(process.cwd(), "node_modules/.bin");
 const destPath = path.join(destDir, platform === 'win32' ? 'muffet.exe' : 'muffet');
 
 if (!fs.existsSync(destDir)) {
