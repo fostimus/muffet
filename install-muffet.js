@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 
 const platform = os.platform();
-const binaryPath = path.join(process.cwd(), "binaries");
+const binaryPath = path.join(process.cwd(), "bin");
 
 let binaryName;
 
@@ -22,7 +22,7 @@ else {
   process.exit(1);
 }
 
-const sourcePath = path.join(`${process.cwd()}/binaries`, binaryName);
+const sourcePath = path.join(`${process.cwd()}/bin`, binaryName);
 const destDir = path.resolve(process.cwd(), "../..", "node_modules/.bin");
 const destPath = path.join(
   destDir,
