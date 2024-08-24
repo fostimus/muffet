@@ -1,6 +1,6 @@
 {
   "name": "muffet",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "license": "MIT",
   "author": "Derek Foster",
   "description": "Node wrapper for the golang CLI tool, Muffet",
