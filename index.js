@@ -1,6 +1,7 @@
 const { exec } = require("child_process");
 const util = require("util");
 const path = require("path");
+const compact = require("lodash/compact");
 const execPromise = util.promisify(exec);
 
 const MUFFET_VERSION = "2.10.2";
@@ -14,7 +15,7 @@ const muffetPath = path.join(
   process.platform === "win32" ? "muffet.exe" : "muffet"
 );
 
-async function runMuffet(url, opts) {
+function getOptionString(options) {
   const {
     // TODO: support all options
     maxConnections,
@@ -69,24 +70,29 @@ async function runMuffet(url, opts) {
     throw new Error(`format must be one of ${FORMAT_OPTIONS.join(", ")}`);
   }
 
-  const muffetCommand = `${muffetPath} ${url} ${
-    timeout ? `--timeout=${timeout}` : ""
-  } ${maxConnections ? `--max-connections=${maxConnections}` : ""}
-  ${
+  const optionsArray = compact([
+    timeout ? `--timeout=${timeout}` : null,
+    maxConnections ? `--max-connections=${maxConnections}` : null,
     maxConnectionsPerHost
       ? ` --max-connections-per-host=${maxConnectionsPerHost}`
-      : ""
-  } ${
+      : null,
     maxResponseBodySize
       ? ` --max-response-body-size=${maxResponseBodySize}`
-      : ""
-  } ${bufferSize ? `--buffer-size=${bufferSize}` : ""} ${
-    color ? ` --color=${color}` : ""
-  } ${skipTlsVerification ? "--skip-tls-verification" : ""} ${
-    onePageOnly ? "--one-page-only" : ""
-  } ${
-    format ? `--format=${format}` : ""
-  } --header="User-Agent: Muffet/${MUFFET_VERSION}"`;
+      : null,
+    bufferSize ? `--buffer-size=${bufferSize}` : null,
+    color ? ` --color=${color}` : null,
+    skipTlsVerification ? "--skip-tls-verification" : null,
+    onePageOnly ? "--one-page-only" : null,
+    format ? `--format=${format}` : null,
+    // TODO: migrate headers to string
+    `--header="User-Agent: Muffet/${MUFFET_VERSION}"`,
+  ]);
+
+  return optionsArray.join(" ");
+}
+
+async function runMuffet(url, options) {
+  const muffetCommand = `${muffetPath} ${url} ${getOptionString(options)}`;
 
   if (outputMuffetCommand) {
     console.log("Muffet command:", muffetCommand);
