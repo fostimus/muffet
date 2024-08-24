@@ -1,11 +1,14 @@
 {
   "name": "muffet",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "license": "MIT",
   "author": "Derek Foster",
   "description": "Node wrapper for the golang CLI tool, Muffet",
   "main": "index.js",
   "scripts": {
     "postinstall": "node install-muffet.js"
+  },
+  "dependencies": {
+    "lodash": "4.17.21"
   }
 }
