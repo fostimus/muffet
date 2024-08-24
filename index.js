@@ -32,23 +32,32 @@ async function runMuffet(url, opts) {
     outputMuffetCommand,
   } = opts || {};
 
-  if (!Number.isInteger(timeout) || timeout < 0) {
+  if (timeout && (!Number.isInteger(timeout) || timeout < 0)) {
     throw new Error("timeout must be a positive integer");
   }
 
-  if (!Number.isInteger(maxConnections) || maxConnections < 0) {
+  if (
+    maxConnections &&
+    (!Number.isInteger(maxConnections) || maxConnections < 0)
+  ) {
     throw new Error("maxConnections must be a positive integer");
   }
 
-  if (!Number.isInteger(maxConnectionsPerHost) || maxConnectionsPerHost < 0) {
+  if (
+    maxConnectionsPerHost &&
+    (!Number.isInteger(maxConnectionsPerHost) || maxConnectionsPerHost < 0)
+  ) {
     throw new Error("maxConnectionsPerHost must be a positive integer");
   }
 
-  if (!Number.isInteger(maxResponseBodySize) || maxResponseBodySize < 0) {
+  if (
+    maxResponseBodySize &&
+    (!Number.isInteger(maxResponseBodySize) || maxResponseBodySize < 0)
+  ) {
     throw new Error("maxResponseBodySize must be a positive integer");
   }
 
-  if (!Number.isInteger(bufferSize) || bufferSize < 0) {
+  if (bufferSize && (!Number.isInteger(bufferSize) || bufferSize < 0)) {
     throw new Error("bufferSize must be a positive integer");
   }
 
