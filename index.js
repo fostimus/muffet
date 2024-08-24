@@ -4,6 +4,8 @@ const path = require("path");
 const execPromise = util.promisify(exec);
 
 const MUFFET_VERSION = "2.10.2";
+const COLOR_OPTIONS = ["always", "auto", "never"];
+const FORMAT_OPTIONS = ["json", "text", "junit"];
 
 const muffetPath = path.join(
   process.cwd(),
@@ -16,6 +18,8 @@ async function runMuffet(url, opts) {
   const {
     // TODO: support all options
     maxConnections,
+    maxConnectionsPerHost,
+    maxResponseBodySize,
     bufferSize,
     color,
     skipTlsVerification,
@@ -28,13 +32,52 @@ async function runMuffet(url, opts) {
     outputMuffetCommand,
   } = opts || {};
 
-  // TODO: some validation on the options, if user supplied wrong options
+  if (!Number.isInteger(timeout) || timeout < 0) {
+    throw new Error("timeout must be a positive integer");
+  }
+
+  if (!Number.isInteger(maxConnections) || maxConnections < 0) {
+    throw new Error("maxConnections must be a positive integer");
+  }
+
+  if (!Number.isInteger(maxConnectionsPerHost) || maxConnectionsPerHost < 0) {
+    throw new Error("maxConnectionsPerHost must be a positive integer");
+  }
+
+  if (!Number.isInteger(maxResponseBodySize) || maxResponseBodySize < 0) {
+    throw new Error("maxResponseBodySize must be a positive integer");
+  }
+
+  if (!Number.isInteger(bufferSize) || bufferSize < 0) {
+    throw new Error("bufferSize must be a positive integer");
+  }
+
+  if (color && !COLOR_OPTIONS.includes(color)) {
+    throw new Error(`color must be one of ${COLOR_OPTIONS.join(", ")}`);
+  }
+
+  if (format && !FORMAT_OPTIONS.includes(format)) {
+    throw new Error(`format must be one of ${FORMAT_OPTIONS.join(", ")}`);
+  }
 
   const muffetCommand = `${muffetPath} ${url} ${
-    timeout ? `--timeout=${timeout}s` : ""
+    timeout ? `--timeout=${timeout}` : ""
+  } ${maxConnections ? `--max-connections=${maxConnections}` : ""}
+  ${
+    maxConnectionsPerHost
+      ? ` --max-connections-per-host=${maxConnectionsPerHost}`
+      : ""
   } ${
-    maxConnections ? `--max-connections=${maxConnections}` : ""
-  } --buffer-size=8192 --color=never --skip-tls-verification --one-page-only --format=json --header="User-Agent: Muffet/${MUFFET_VERSION}"`;
+    maxResponseBodySize
+      ? ` --max-response-body-size=${maxResponseBodySize}`
+      : ""
+  } ${bufferSize ? `--buffer-size=${bufferSize}` : ""} ${
+    color ? ` --color=${color}` : ""
+  } ${skipTlsVerification ? "--skip-tls-verification" : ""} ${
+    onePageOnly ? "--one-page-only" : ""
+  } ${
+    format ? `--format=${format}` : ""
+  } --header="User-Agent: Muffet/${MUFFET_VERSION}"`;
 
   if (outputMuffetCommand) {
     console.log("Muffet command:", muffetCommand);
