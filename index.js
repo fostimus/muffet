@@ -31,7 +31,7 @@ function getOptionString(options) {
     timeout,
     // specific to this wrapper
     outputMuffetCommand,
-  } = opts || {};
+  } = options || {};
 
   if (timeout && (!Number.isInteger(timeout) || timeout < 0)) {
     throw new Error("timeout must be a positive integer");
