@@ -15,6 +15,7 @@ const muffetPath = path.join(
   process.platform === "win32" ? "muffet.exe" : "muffet"
 );
 
+// only for options that are supported by muffet. others go outside of this function
 function getOptionString(options) {
   const {
     // TODO: support all options
@@ -29,8 +30,6 @@ function getOptionString(options) {
     // TODO: convert headers from array to string
     headers,
     timeout,
-    // specific to this wrapper
-    outputMuffetCommand,
   } = options || {};
 
   if (timeout && (!Number.isInteger(timeout) || timeout < 0)) {
@@ -94,7 +93,7 @@ function getOptionString(options) {
 async function runMuffet(url, options) {
   const muffetCommand = `${muffetPath} ${url} ${getOptionString(options)}`;
 
-  if (outputMuffetCommand) {
+  if (options?.outputMuffetCommand) {
     console.log("Muffet command:", muffetCommand);
   }
 
